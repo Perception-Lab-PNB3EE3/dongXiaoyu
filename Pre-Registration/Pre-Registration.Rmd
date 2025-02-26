@@ -1,0 +1,220 @@
+---
+title: "My Pre-Registration"
+output: html_document
+bibliography: Xiaoyu_Dong.bib
+csl: apa.csl  
+---
+
+# Pre-registration Template
+
+Adapted from <https://osf.io/preprints/metaarxiv/epgjd> into markdown format.
+
+<details>
+
+-   [Study Information](#study-information)
+    -   [1. Title](#1-title)
+    -   [2. Authors](#2-authors)
+    -   [3. Description](#3-description)
+    -   [4. Hypotheses](#4-hypotheses)
+-   [Design Plan](#design-plan)
+    -   [5. Study type](#5-study-type)
+    -   [6. Blinding](#6-blinding)
+    -   [7. Is there any additional blinding in this study?](#7-is-there-any-additional-blinding-in-this-study-)
+    -   [8. Study design](#8-study-design)
+    -   [9. Randomization](#9-randomization)
+-   [Sampling Plan](#sampling-plan)
+    -   [10. Existing data](#10-existing-data)
+    -   [11. Explanation of existing data](#11-explanation-of-existing-data)
+    -   [12. Data collection procedures](#12-data-collection-procedures)
+    -   [13. Sample size](#13-sample-size)
+    -   [14. Sample size rationale](#14-sample-size-rationale)
+    -   [15. Stopping rule](#15-stopping-rule)
+-   [Variables](#variables)
+    -   [16. Manipulated variables](#16-manipulated-variables)
+    -   [17. Measured variables](#17-measured-variables)
+    -   [18. Indices](#18-indices)
+-   [Analysis Plan](#analysis-plan)
+    -   [19. Statistical models](#19-statistical-models)
+    -   [20. Transformations](#20-transformations)
+    -   [21. Inference criteria](#21-inference-criteria)
+    -   [22. Data exclusion](#22-data-exclusion)
+    -   [23. Missing data](#23-missing-data)
+    -   [24. Exploratory analysis](#24-exploratory-analysis)
+-   [Other](#other)
+    -   [25. Other](#25-other)
+
+</details>
+
+# Study Information {#study-information}
+
+## 1. Title
+
+> How coaching behaviours affect sports anxiety
+
+## 2. Authors
+
+> Xiaoyu Dong
+
+## 3. Description
+
+> Please give a brief description of your study, including some background, the purpose of the of the study, or broad research questions.
+>
+> NOTE that for the sake of this class, we are expecting longer descriptions than required in the OSF template. Please see the assignment description for more details.
+>
+> Here is an example of how to cite a source in your Description [@wright2023auditory]. NOTE that this reference gets pulled from the .bib file that you define in your YAML header at the top of this document. You should swap out my `example.bib` file with your own bib file. You can export a .bib file from your preferred reference management software. Or you can create your own. Just make sure the filename is defined properly above, and sources will automatically get integrated into your text and compiled into a reference list at the end of this document. To get the references to display in proper APA style, you should make sure the appropriate .csl file is fined in the YAML header. You can find a large list of different .csl files here: <https://github.com/citation-style-language/styles>. For ease, I have included the `apa.csl` file in the course resources [here.](apa.csl)
+>
+> If you want an in-text citation that does not involve paranthesis, e.g., to say something like "@wright2023auditory show...", then just leave the square brackets off of the citation (`@refkeyhere` vs. `[@refkeyhere]`).
+>
+> The [example.bib](example.bib) file is also in the course resources. If you are ever confused about where to find these files, you can always go to the source code for this website: <https://github.com/Perception-Lab-PNB3EE3/courseBook/tree/main>
+
+> In a sports competition, there are many unexpected and man-made factors involved to affect and determine the results which were widely researched in previous studies (Paul et al., 2016; Bali, 2015). Among those internal and external factors, coaches’ roles are incredibly important. The coach is usually the person with the closest relationship and the most important responsibilities during the training and competition of the athletes. Coaches provide comprehensive suggestions on skills, competition data, and mentality. In most instances, either in training or competitions, coaches tend to focus on the improvement of physical strength, team coordination, and sports skills (Paul et al., 2016). However, since anxiety is an unpleasant response to sports pressure, it's usually thought of as a negative factor in sports competition (Ford et al., 2017). Coaching styles are critical to improve athletes’ performance. When athletes are in a state of high anxiety, they lose their attention and cannot complete performance as they expect (Englert and Bertrams, 2012). Positive interaction between coaches and athletes reduces the effect of negative mental states and improves competition performance (Woodman and Hardy, 2003). In most sports teams, coaches play a role in dominating the team. What the coaches do can affect the team atmosphere and athletes’ mental states. Smith, Smoll and Schutz (1900) created Sport Anxiety Scale (SAS) to test the athletes’ anxiety levels which was able to define sport-related anxiety and broke down the elements of anxiety. According to Smith and Smoll's (1995) model in following research, anxiety-reduction trained coaches effectively reduce child athletes’ trait anxiety. Smith introduced a training program called Coach Effectiveness Training (CET) which increased target behaviours (encouraging etc.) and reduced undesirable behaviours (punishment etc.). The interventions predict the team atmosphere and the athletes’ anxiety levels. Positive interventions create a supportive or mastery-oriented atmosphere in the team and eventually reduce athletes’ anxiety levels (Smith et al., 2007). While a negative personal rapport could be a better predictor of high anxiety than other factors in the competitions such as physical training and technique skills (Baker et al., 2000). If the coaches take some positive behaviours during training and competitions, they could significantly reduce anxiety levels (Smith et al., 2007). The effectiveness is not only dependent on their behaviours but also on the opinions or estimations of athletes regarding the coaches (Stephen et al., 2022). An open, positive coach-athlete relationship directly relates to lower anxiety levels. Even with the athletes on the same team, one with a higher estimation of their coaches could have lower anxiety (Stephen et al., 2022). Athletes have different mental states which could affect their perception of coaching behaviours. If the athletes are in a state of low self-confidence and high anxiety, they would be more likely to negatively refer to the coaching behaviours even if the behaviours are neutral (Williams et al., 2003). That anxiety leads them to exaggerate perceived negative mannerisms and feedback from their coaches which makes their anxiety worse (Williams et al., 2003) (Woodman and Hardy, 2003). Based on those previous studies, we know that positive coaching behaviours could be benefitial to reduce athletes' anxiety and furthermore, improve competitive performance. In this study, we are going to determine if the intervention of coaching behaviours could lead to anxiety reduction over time during the season. To address this question, sports teams will be randomly assigned to either an experimental group, where coaches receive training program, or a control group, where no intervention is provided. Athletes' anxiety levels will be collected using Sports Anxiety Scale 2 (SAS 2) at three time points: pre-season, mid-season, and post-season (Smith et al., 2006). By analyzing these data, we are seeking for evidence on the impact of coaching behaviours on anxiety regulation in sports, contributing to practical coaching strategies aimed at fostering a healthier competitive and training environment.
+
+## 4. Hypotheses
+
+> If coaching behaviours affect athletes' anxiety levels, after a coaching training program, the anxiety questionnaire would show a decreasing anxiety levels.
+
+# Design Plan {#design-plan}
+
+> In this section, you will be asked to describe the overall design of your study. Remember that this research plan is designed to register a single study, so if you have multiple experimental designs, please complete a separate preregistration.
+
+> Randomly select teams in different sports and assign into control group and experimental group. Ask the athletes do the anxiety questionnaire (i.e. Sports Anxiety Scale 2, SAS) (Smith et al., 2006). First one is done before any intervention. Then offer the training program (i.e. Coach Effectiveness Training) to the coaches experimental group before the season (Smith and Smoll, 1995). During the season, the athletes do the same questionnaire for the second time. And the last time is done at the end of the season. Collecting and analyzing all the answers and test if there are any correlations. If there are any increase or decrease after the training program compared to the control group, there might be a relationship between the coaching behaviours and the athletes' anxiety levels.
+
+## 5. Study type
+
+> **Experiment** - A researcher randomly assigns treatments to study subjects, this includes field or lab experiments. This is also known as an intervention experiment and includes randomized controlled trials.
+
+## 6. Blinding
+
+> Blinding describes who is aware of the experimental manipulations within a study. Mark all that apply.
+
+-   [ ] No blinding is involved in this study.
+
+-   [x] For studies that involve human subjects, they will not know the treatment group to which they have been assigned.
+
+-   [ ] Personnel who interact directly with the study subjects (either human or non-human subjects) will not be aware of the assigned treatments. (Commonly known as “double blind”)
+
+-   [ ] Personnel who analyze the data collected from the study are not aware of the treatment applied to any given group.
+
+## 7. Is there any additional blinding in this study?
+
+> The coaches who are in experimental group will know the intervention. But other coaches or the athletes would not know the group to which they have been assigned.
+
+## 8. Study design
+
+> We have a between subjects design with 1 factor (take the training program or not) with 3 levels (3 times of questionnaire) (Baker et al., 2000).
+
+## 9. Randomization
+
+> We will use block randomization. The participants will be randomly assigned to control and experimental groups and the sample sizes in each group should be equal.
+
+# Sampling Plan {#sampling-plan}
+
+> In this section we'll ask you to describe how you plan to collect samples, as well as the number of samples you plan to collect and your rationale for this decision. Please keep in mind that the data described in this section should be the actual data used for analysis, so if you are using a subset of a larger dataset, please describe the subset that will actually be used in your study.
+
+## 10. Existing data
+
+> Preregistration is designed to make clear the distinction between confirmatory tests, specified prior to seeing the data, and exploratory analyses conducted after observing the data. Therefore, creating a research plan in which existing data will be used presents unique challenges. Please select the description that best describes your situation. Please do not hesitate to contact us if you have questions about how to answer this question ([prereg\@cos.io](mailto:prereg@cos.io){.email}).
+
+-   [x] Registration prior to creation of data: As of the date of submission of this research plan for preregistration, the data have not yet been collected, created, or realized.
+-   [ ] Registration prior to any human observation of the data: As of the date of submission, the data exist but have not yet been quantified, constructed, observed, or reported by anyone - including individuals that are not associated with the proposed study. Examples include museum specimens that have not been measured and data that have been collected by non-human collectors and are inaccessible.
+-   [ ] Registration prior to accessing the data: As of the date of submission, the data exist, but have not been accessed by you or your collaborators. Commonly, this includes data that has been collected by another researcher or institution.
+-   [ ] Registration prior to analysis of the data: As of the date of submission, the data exist and you have accessed it, though no analysis has been conducted related to the research plan (including calculation of summary statistics). A common situation for this scenario when a large dataset exists that is used for many different studies over time, or when a data set is randomly split into a sample for exploratory analyses, and the other section of data is reserved for later confirmatory data analysis.
+-   [ ] Registration following analysis of the data: As of the date of submission, you have accessed and analyzed some of the data relevant to the research plan. This includes preliminary analysis of variables, calculation of descriptive statistics, and observation of data distributions. Please see cos.io/prereg for more information.
+
+## 11. Explanation of existing data
+
+> The existing data contains a larger sample sizes and more conditions. We are going to use only a small portion of it to conduct the study. Conduct the specified analysis on that part of the dataset that had not been investigated by the researcher now. Futher analysis will be done after the registration.
+
+## 12. Data collection procedures
+
+> Participants will be recruited through advertisements within local sports communities and venues. Also, we will also contact local club and ask their sports team athletes and coaches if they are willing to participate before the season. Participants (athletes) would sign the agreement before doing the questionnaires each time. The coaches also needs to agree to receive training and behavioral observation. All the participants are able to quit anytime they want
+
+## 13. Sample size
+
+> The target sample size is 26 participants in each group (by calculating effect size and power). Idealy, each group should contain at least one team or one coach with their athletes. We will attempt to recruit up to 35 participants assuming that not all will complete the total task.
+
+## 14. Sample size rationale
+
+> Use the software R Studio to conduct a power. Our goal was to obtain .80 power to detect a large effect size of .80 (to make sure the application of the study) at the standard .05 alpha error probability.
+
+## 15. Stopping rule
+
+> We are going to connect with the teams first, if there are more than 35 athletes training under this coach, they will be asked if they are willing to participate. If there are less than 35 players, new clubs or teams will be contacted until there are more than 35 players willing to participate.
+
+# Variables {#variables}
+
+> manipulated: if the coaches receive the training program. measured: the anxiety quetionnaire scores of the athletes.
+
+## 16. Manipulated variables
+
+> The variables: training program presence or absence. (Receive or not)
+
+## 17. Measured variables
+
+> It will be measured in the SAS with 21 questions. For example: "Do you like your manager/head coach more or less than you did at the beginning of the season?" or "How much did you like playing for your manager/head coach?" with a 0-4 scale. 0 is "dislike a lot" and 4 is "like a lot".
+
+## 18. Indices
+
+> We will take the mean of each question in the questionnaire. Each question refer to different anxiety problems such as worry score, concentration disruption score, somatic trait anxiety score. Tnen calculate the scores of each problem.
+
+# Analysis Plan {#analysis-plan}
+
+> A confirmatory analysis plan must state up front which variables are predictors (independent) and which are the outcomes (dependent), otherwise it is an exploratory analysis. You are allowed to describe any exploratory work here, but a clear confirmatory analysis is required.
+
+## 19. Statistical models
+
+> We will use a independent between t-test to analyze the difference between the groups; and a paired t-test to analyze the difference among the three times of questionnaire. The manipulated, categorical independent variable is the training program whereas the interval dependent variable is questionnaire scores.
+
+## 20. Transformations
+
+> The independent variable needs transformation. Since it's categorical, "receive a training program" will be coded as "1" while "no intervention" will be coded as "0" during the analyzing. For the dependent variable, we will use the score so no need for any additional transformation.
+
+## 21. Inference criteria
+
+> We will use the standard p\<.05 criteria for determining if the two-tailed t-test and the pos-hoc test suggest that the results are significantly different. Since there are two t-tests conducted inthe study, the Bonferroni test adjusts for multiple comparisons to reduce Type I error here.
+
+## 22. Data exclusion
+
+> There is verification that each subject answered each of the three questionnaire during the study period. If the athletes experience serious injury or other events that affect the anxiety levels which is not caused by coaching behaviours, the data will be removed when analyzing. Basically, when analyzing the data, if there are significant changes within one subject during the three times, researchers will chekc the reasons, if they're not caused by independent variable, they will be considered as outliers.
+
+## 23. Missing data
+
+> If a subject does not complete any of the three times questionnaire, that subject will not be included in the analysis. Additionally, if the change among the three times are not caused by independent variable, they will be considered as outliers.
+
+## 24. Exploratory analysis
+
+> We expect that sports events may be related to the effect of coaching behaviours. Therefore, we will look for relationships between demographic variables (age, gender, individual or team sports, rules) and the primary outcome measures of anxiety scores.
+
+# Other {#other}
+
+## 25. Other
+
+> If underage athletes are involved in the study, obtaining permission and supervision from their guardians is also needed.
+
+# References
+
+Baker, J., Cote, J., & Hawes, R. (2000). The relationship between coaching behaviours and sport anxiety in athletes. Journal of Science and Medicine in Sport, 3(2), 110–119. https://doi.org/10.1016/S1440-2440(00)80073-0
+
+Bali, A. (2015). Psychological factors affecting sports performance. International Journal of Physical Education, Sports and Health, 1(6), 92-95.
+
+Englert, C., & Bertrams, A. (2012). Anxiety, ego depletion, and sports performance. Journal of Sport & Exercise Psychology, 34(5), 580–599. https://doi.org/10.1123/jsep.34.5.580
+
+Ford, J. L., Ildefonso, K., Jones, M. L., & Arvinen-Barrow, M. (2017). Sport-related anxiety: Current insights. Open Access Journal of Sports Medicine, 8, 205–212. https://doi.org/10.2147/OAJSM.S125845
+
+Paul, D. J., Gabbett, T. J., & Nassis, G. P. (2016). Agility in Team Sports: Testing, Training and Factors Affecting Performance. Sports Medicine, 46(3), 421–442. https://doi.org/10.1007/s40279-015-0428-2
+
+Smith, R. E., Smoll, F. L., & Barnett, N. P. (1995). Reduction of children’s sport performance anxiety through social support and stress-reduction training for coaches. Journal of Applied Developmental Psychology, 16(1), 125–142. https://doi.org/10.1016/0193-3973(95)90020-9
+
+Smith, R. E., Smoll, F. L., & Cumming, S. P. (2007). Effects of a Motivational Climate Intervention for Coaches on Young Athletes’ Sport Performance Anxiety. https://doi.org/10.1123/jsep.29.1.39
+
+Smith, R. E., Smoll, F. L., Cumming, S. P., & Grossbard, J. R. (2006). Measurement of Multidimensional Sport Performance Anxiety in Children and Adults: The Sport Anxiety Scale-2. https://doi.org/10.1123/jsep.28.4.479
+
+Smith, R. E., Smoll, F. L., & Schutz, R. W. (1990). Measurement and correlates of sport-specific cognitive and somatic trait anxiety: The sport anxiety scale. Anxiety Research, 2(4), 263–280. https://doi.org/10.1080/08917779008248733
+
+Stephen, S. A., Habeeb, C. M., & Arthur, C. A. (2022). Congruence of efficacy beliefs on the coach-athlete relationship and athlete anxiety: Athlete self-efficacy and coach estimation of athlete self-efficacy. Psychology of Sport and Exercise, 58, 102062. https://doi.org/10.1016/j.psychsport.2021.102062
+
+The relative impact of cognitive anxiety and self-confidence upon sport performance: A meta-analysis | Scholars Portal Journals. (n.d.). Retrieved February 26, 2025, from https://journals-scholarsportal-info.libaccess.lib.mcmaster.ca/details/02640414/v21i0006/443_triocasuspam.xml
+
+Williams, J. M., Kenow, L. J., Jerome, G. J., Rogers, T., Sartain, T. A., & Darland, G. (2003). Factor Structure of the Coaching Behavior Questionnaire and Its Relationship to Athlete Variables. https://doi.org/10.1123/tsp.17.1.16
+
+WOODMAN, T., & HARDY, L. (2003). The relative impact of cognitive anxiety and self-confidence upon sport performance: A meta-analysis. Journal of Sports Sciences, 21(6), 443–457. https://doi.org/10.1080/0264041031000101809
