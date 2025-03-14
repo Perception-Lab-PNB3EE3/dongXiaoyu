@@ -1,0 +1,206 @@
+<!DOCTYPE html>>
+<html>
+  <head>
+    <title>My experiment</title>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/plugin-html-button-response.js"></script>
+    <script src="jspsych/plugin-preload.js"></script>
+    <script src="jspsych/plugin-survey-likert.js"></script>
+    <script src="jspsych/plugin-survey-text.js"></script>
+    <script src="jspsych/plugin-survey-multi-select.js"></script>
+    <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+        jsPsych.data.get().localSave('csv','mydata.csv');
+      }
+    });
+
+    var timeline = [];
+
+    var welcome = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: "Welcome to the study. Click 'Start' to begin.",
+      choices: ["Start"]
+    };
+    timeline.push(welcome);
+
+
+    var Precaution = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+        <p>This study needs previous intervention before doing this survey.</p>
+        <p>If you have done the intervention, please check "completed" to continue. </p>
+        <p>If not, please contact the researcher</p>
+
+        <input type="checkbox" id="scales" name="scales"> Completed
+      `,
+      choices: ["Continue"], 
+      on_load: function() {
+        const continue_btn = document.getElementById("jspsych-html-button-response-btngroup");
+        continue_btn.style.display = "none"; 
+        document.getElementById("scales").addEventListener("click", function(){
+          continue_btn.style.display = "block";
+        });
+      },
+    };
+    timeline.push(Precaution);
+
+    var instructions = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+        <p>In this experiment, you will see 15 questions on the screen.</p>
+        <p>They are in a scale from 1-4, from "Not At All" to "Very Much". </p>
+        <p>There is no right or wrong answer. Select what you USUALLY feel before or while you compete in sports</p>
+
+        <p>Here is an example of the questions: </p>
+        <img src="Example.png" alt="Example Question" style="width: 80%; max-width: 600px; display: block; margin: 20px auto; border: 1px solid #000;">
+      `,
+      choices: ["Continue"]
+    };
+    timeline.push(instructions);
+
+
+    let somaticIndices = [1, 5, 9, 11, 13];         /* Questions 2, 6, 10, 12, 14 */
+    let worryIndices = [2, 4, 7, 8, 10];            /* Questions 3, 5, 8, 9, 11 */
+    let concentrationIndices = [0, 3, 6, 12, 14];   /* Questions 1, 4, 7, 13, 15 */
+
+
+    var blocks = [
+      {
+        title: "Answer the following 5 questions based on your experience before or while you compete in sports",
+        questions: [
+          "It is hard to concentrate on the game.",
+          "My body feels tense.",
+          "I worry that I will not play well.",
+          "It is hard for me to focus on what I am supposed to do.",
+          "I worry that I will let others down."
+        ]
+      },
+      {
+        title: "Answer the following 5 questions based on your experience before or while you compete in sports",
+        questions: [
+          "I feel tense in my stomach.",
+          "I lose focus on the game.",
+          "I worry that I will not play my best.",
+          "I worry that I will play badly.",
+          "My muscles feel shaky."
+        ]
+      },
+      {
+        title: "Answer the following 5 questions based on your experience before or while you compete in sports",
+        questions: [
+          "I worry that I will mess up during the game.",
+          "My stomach feels upset.",
+          "I cannot think clearly during the game.",
+          "My muscles feel tight because I am nervous.",
+          "I have a hard time focusing on what my coach tells me to do."
+        ]
+      }
+    ];
+    
+
+    let responses = [];
+
+    blocks.forEach((block, blockIndex) => {
+      timeline.push({
+        type: jsPsychHtmlButtonResponse,
+        stimulus: `<h2>${block.title}</h2>`,
+        choices: ["Continue"]
+      });
+
+      block.questions.forEach((question, index) => {
+        let globalIndex = blockIndex * 5 + index; 
+
+        timeline.push({
+          type: jsPsychSurveyLikert,
+          questions: [{
+            prompt: `<p style="font-size: 30px; font-weight: bold;">${question}</p>`, 
+            labels: ["1 - Not At All", "2 - A Little Bit", "3 - Pretty Much", "4 - Very Much"]
+          }],
+          button_label: "Submit",
+          scale_width: 750, 
+          on_finish: function(data) {
+            let responseValue = data.response["Q0"] + 1; 
+            responses.push({ index: globalIndex, score: responseValue });
+            jsPsych.data.addProperties(data.response);
+          }
+        });
+      });
+    });
+
+    var age = {
+      type: jsPsychSurveyText,
+      questions: [
+        {        
+          prompt: "How old are you at the beginning of this season?", 
+          placeholder: "Enter you age", 
+          required: true
+        }
+      ],
+    };
+    timeline.push(age);
+
+    var sports_question = {
+      type: jsPsychSurveyText,
+      questions: [
+        {
+          prompt: "What kinds of sports do you participate in?", 
+          placeholder: "e.g., Basketball, Swimming, Running", 
+          required: true
+        }
+      ],
+    };
+    timeline.push(sports_question); 
+
+    var timepoint = {
+      type: jsPsychSurveyMultiSelect,
+      questions: [
+        {
+          prompt: "Which stage do you think the current season is in?", 
+          options: [
+           "Pre-season (e.g., preparation phase, not yet officially started)", 
+           "Mid-season (e.g., games are ongoing)", 
+           "Post-season (e.g., games have ended, entering the summary phase)"
+          ],
+        required: true
+        }
+      ]
+    }; 
+    timeline.push(timepoint);
+
+    var debriefPage = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: function() {
+        let somaticScore = 0, worryScore = 0, concentrationScore = 0;
+        responses.forEach(({ index, score }) => {
+          if (somaticIndices.includes(index)) {
+            somaticScore += score;
+          } else if (worryIndices.includes(index)) {
+            worryScore += score;
+          } else if (concentrationIndices.includes(index)) {
+            concentrationScore += score;
+          }
+        });
+
+        return `<h2>Debrief</h2>
+          <p>This survey measures your anxiety levels when attending sports.</p>
+          <p><strong>Somatic Score:</strong> ${somaticScore}</p>
+          <p><strong>Worry Score:</strong> ${worryScore}</p>
+          <p><strong>Concentration Score:</strong> ${concentrationScore}</p>
+          <p>Thank you for completing the questionnaire!</p>`;
+      },
+      choices: ["Finish"]
+    };
+    timeline.push(debriefPage);
+    
+    
+    
+    jsPsych.run([timeline]);
+  </script>
+</html>
