@@ -3,7 +3,6 @@
   <head>
     <title>My experiment</title>
     <script src="jspsych/jspsych.js"></script>
-    <script src="jspsych/plugin-html-keyboard-response.js"></script>
     <script src="jspsych/plugin-html-button-response.js"></script>
     <script src="jspsych/plugin-preload.js"></script>
     <script src="jspsych/plugin-survey-likert.js"></script>
@@ -16,8 +15,29 @@
 
     var jsPsych = initJsPsych({
       on_finish: function() {
+        // Compute total scores
+        let somaticScore = 0, worryScore = 0, concentrationScore = 0;
+        responses.forEach(({ index, score }) => {
+          if (somaticIndices.includes(index)) {
+            somaticScore += score;
+          } else if (worryIndices.includes(index)) {
+            worryScore += score;
+          } else if (concentrationIndices.includes(index)) {
+            concentrationScore += score;
+          }
+        });
+
+        // Save to CSV with custom columns
+        jsPsych.data.get().addToAll({
+          somatic_score: somaticScore,
+          worry_score: worryScore,
+          concentration_score: concentrationScore
+        });
+
+        jsPsych.data.get().localSave('csv', 'mydata.csv');
+
+        // Display data for user review
         jsPsych.data.displayData();
-        jsPsych.data.get().localSave('csv','mydata.csv');
       }
     });
 
@@ -30,14 +50,12 @@
     };
     timeline.push(welcome);
 
-
     var Precaution = {
       type: jsPsychHtmlButtonResponse,
       stimulus: `
         <p>This study needs previous intervention before doing this survey.</p>
         <p>If you have done the intervention, please check "completed" to continue. </p>
         <p>If not, please contact the researcher</p>
-
         <input type="checkbox" id="scales" name="scales"> Completed
       `,
       choices: ["Continue"], 
@@ -128,7 +146,7 @@
           on_finish: function(data) {
             let responseValue = data.response["Q0"] + 1; 
             responses.push({ index: globalIndex, score: responseValue });
-            jsPsych.data.addProperties(data.response);
+            jsPsych.data.addProperties({ [`Q${globalIndex + 1}`]: responseValue });
           }
         });
       });
