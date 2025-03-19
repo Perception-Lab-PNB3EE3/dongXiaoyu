@@ -188,7 +188,11 @@
           ],
         required: true
         }
-      ]
+      ],
+      on_finish: function(data) {
+        let selectedStage = data.response["Q0"].join(", "); // Convert array to string
+        jsPsych.data.addProperties({ season_stage: selectedStage }); // Save as text
+      }
     }; 
     timeline.push(timepoint);
 
