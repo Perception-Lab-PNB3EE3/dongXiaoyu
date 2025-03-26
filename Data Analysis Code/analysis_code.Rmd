@@ -1,0 +1,173 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+Preparation
+```{r}
+# Load the packages
+library(ggplot2)
+library(readr)
+# import pandas in python
+
+# read the data
+
+# simulating data
+
+ # participants
+potentialBackground = c()
+
+# explore 3 subgroups
+nSubs = 3
+nSubGourp1 = 60
+
+# condition
+nConds = 2
+condLabels = c("pre, mid, post")
+
+# nTrialPerCond = 
+
+# outcome measure
+# reaction time/likert responses...
+
+# think through df
+# row - participant
+# column - condition, DVs, demo
+
+df <- data.frame(participant=rep(0,sample_sizeRequired),
+                 Condition=rep("NA", sample_sizeRequired),
+                 ReactionT=rep("NA", sample_sizeRequired),
+                 Accuracy=rep(0,sample_sizeRequired),
+                 likert=rep(0,sample_sizeRequired),
+                 stringsAsFactors=TRUE)
+
+df$participant = seq(1,sample_sizeRequired, each=condPerParticipant)
+
+df$condition <- sample(condLabels, sample_sizeRequired, replace = TRUE)
+
+# background
+
+
+# random distribution
+df$ReactionT = rnorm(sample_sizeRequired, mean=700, sd=200)
+
+df$ReactionT[df$condition == "AI"] = df$ReactionT +500
+
+
+
+# 
+df$likert <- sample(c(1:7), sample_sizeRequired, replace=TRUE)
+
+```
+
+
+
+Explore
+```{r}
+# print
+head(df)
+
+# formatting / cleaning
+
+# conversion of data types. 
+summary()
+as.numeric() # change to number
+
+# dealing with missing data
+
+# remove unnecessary data
+
+# remove according to exclusion criteria
+
+```
+
+
+Exploration
+```{r}
+# summary / descriptive stats
+
+# check variable distribution
+
+# correlation
+
+# scatterplot between 2 variable
+
+```
+
+Demographic 
+```{r}
+# mention in the paper
+
+# mean and sd of age
+
+# experience
+```
+
+Inferential Stats
+```{r}
+anova()
+t.test()
+
+
+# DV - IV
+
+```
+
+Visualization
+```{r}
+# Bar plot
+# error + sem
+
+# point estimate
+
+# linear
+```
+
+Exploratory
+```{r}
+# 
+```
+
+
+
+
+
+
+Load the file
+```{r}
+library(ggplot2)
+
+getwd()
+setwd("D:/Google 下载")
+df <- read.csv("mydata (5).csv")
+```
+
+Rearrange the data frame
+```{r}
+df_single <- df[1, c("somatic_score", "worry_score", "concentration_score")]
+
+# Convert to long format for plotting
+df_long <- data.frame(
+  Score_Type = c("Somatic", "Worry", "Concentration"),
+  Score = as.numeric(df_single))
+```
+
+
+Individual score visualization
+```{r}
+ggplot(df_long, aes(x = Score_Type, y = Score, fill = Score_Type)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Comparison of Three Scores",
+       x = "Score Type",
+       y = "Score") +
+  theme_minimal()
+```
+

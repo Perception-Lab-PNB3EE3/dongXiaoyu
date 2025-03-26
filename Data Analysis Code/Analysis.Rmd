@@ -1,0 +1,370 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+
+
+Download the package needed for analyzing
+```{r}
+library(ggplot2)
+library(readr)
+library(reshape2)
+library(tidyr)
+library(emmeans)
+if (!require(ggsignif)) install.packages("ggsignif")
+library(ggsignif)  # For significance bars
+
+
+sample_size = 35 # For each group, there are 35 individuals to match the needs of power and effect size. 
+```
+
+Simulating Sample - Without Intervention
+```{r}
+participants <- rep(1:35, each = 3)
+stage <- rep(c("Pre", "Mid", "Post"), times = 35) # Each participant does the questionnaire 3 times in total during the three stages of season (pre-season, mid-season and post-season)
+
+# Generate normally distributed scores (range is 4-20)
+somatic_score_c <- pmin(pmax(round(rnorm(35 * 3, mean = 12, sd = 4)), 4), 20)
+worry_score_c <- pmin(pmax(round(rnorm(35 * 3, mean = 12, sd = 4)), 4), 20)
+concentration_c <- pmin(pmax(round(rnorm(35 * 3, mean = 12, sd = 4)), 4), 20)
+
+# Save into a table
+data_control <- data.frame(
+  Participants = participants,
+  Somatic_Score = somatic_score_c,
+  Worry_Score = worry_score_c,
+  Concentration = concentration_c,
+  Stage = stage
+)
+```
+
+Simulating Sample - With Intervention
+```{r}
+participants <- rep(1:35, each = 3)
+stage <- rep(c("Pre", "Mid", "Post"), times = 35)# Each participant does the questionnaire 3 times in total during the three stages of season (pre-season, mid-season and post-season)
+
+# Generate normally distributed scores (range is 4-20)
+somatic_score_p <- pmin(pmax(round(rnorm(35 * 3, mean = 11, sd = 4)), 4), 20)
+worry_score_p <- pmin(pmax(round(rnorm(35 * 3, mean = 10.5, sd = 4)), 4), 20)
+concentration_p <- pmin(pmax(round(rnorm(35 * 3, mean = 10, sd = 4)), 4), 20)
+
+# Save into a table
+data_exp <- data.frame(
+  Participants = participants,
+  Somatic_Score = somatic_score_p,
+  Worry_Score = worry_score_p,
+  Concentration = concentration_p,
+  Stage = stage
+)
+```
+
+
+
+Clean the missing data
+- If the participants fail to finish one stage of three, their data will be removed. 
+- If any of these three scores is less than 4 or greater than 20 due to any technical issue, the participant's data will be removed. 
+
+1. Clean Control Group
+```{r}
+# Identify missing data with NA and data outside the valid range
+invalid_participants_c <- unique(data_control$Participants[
+  is.na(data_control$Somatic_Score) | is.na(data_control$Worry_Score) | is.na(data_control$Concentration) |
+  data_control$Somatic_Score < 4 | data_control$Somatic_Score > 20 |
+  data_control$Worry_Score < 4 | data_control$Worry_Score > 20 |
+  data_control$Concentration < 4 | data_control$Concentration > 20
+])
+
+# Save the cleaned data frame
+Clean_control <- data_control[!data_control$Participants %in% invalid_participants_c, ]
+```
+
+2. Clean Experiment Group
+```{r}
+# Identify missing data with NA and data outside the valid range
+invalid_participants_p <- unique(data_exp$Participants[
+  is.na(data_exp$Somatic_Score) | is.na(data_exp$Worry_Score) | is.na(data_exp$Concentration) |
+  data_exp$Somatic_Score < 4 | data_exp$Somatic_Score > 20 |
+  data_exp$Worry_Score < 4 | data_exp$Worry_Score > 20 |
+  data_exp$Concentration < 4 | data_exp$Concentration > 20
+])
+
+# Save the cleaned data frame
+Clean_exp <- data_exp[!data_exp$Participants %in% invalid_participants_p, ]
+```
+
+
+Explore and summarize the data. 
+```{r}
+head(Clean_control)
+head(Clean_exp)
+
+summary(Clean_control)
+summary(Clean_exp)
+
+# Get the sum of three scores 
+data_control$Total_Score <- data_control$Somatic_Score + data_control$Worry_Score + data_control$Concentration
+data_exp$Total_Score <- data_exp$Somatic_Score + data_exp$Worry_Score + data_exp$Concentration
+
+# Mean of Control group
+# Pre-Season stage
+contMean_pre <- colMeans(Clean_control[Clean_control$Stage == "Pre", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+
+# Mid-Season stage
+contMean_mid <- colMeans(Clean_control[Clean_control$Stage == "Mid", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+
+# Mid-Season stage
+contMean_post <- colMeans(Clean_control[Clean_control$Stage == "Post", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+
+
+# Mean of experiment group
+# Pre-Season stage
+expMean_pre <- colMeans(Clean_exp[Clean_exp$Stage == "Pre", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+
+# Mid-Season stage
+expMean_mid <- colMeans(Clean_exp[Clean_exp$Stage == "Mid", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+
+# Mid-Season stage
+expMean_post <- colMeans(Clean_exp[Clean_exp$Stage == "Post", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+```
+
+- Get sd and SE of 2 groups
+```{r}
+# Get the sum of scores
+# For Control group
+cont_pre <- rowSums(Clean_control[Clean_control$Stage == "Pre", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+cont_mid <- rowSums(Clean_control[Clean_control$Stage == "Mid", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+cont_post <- rowSums(Clean_control[Clean_control$Stage == "Post", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+
+# For Experiment group
+exp_pre <- rowSums(Clean_exp[Clean_exp$Stage == "Pre", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+exp_mid <- rowSums(Clean_exp[Clean_exp$Stage == "Mid", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+exp_post <- rowSums(Clean_exp[Clean_exp$Stage == "Post", c("Somatic_Score", "Worry_Score", "Concentration")], na.rm = TRUE)
+
+# Calculate SD and SE and save them with means into a table
+sd <- data.frame(
+  Stage = factor(rep(c("Pre", "Mid", "Post"), each = 2), levels = c("Pre", "Mid", "Post")),
+  Group = rep(c("Control", "Experiment"), 3),
+  Mean = c(mean(cont_pre), mean(exp_pre),
+            mean(cont_mid), mean(exp_mid),
+            mean(cont_post), mean(exp_post)),
+  SD = c(sd(cont_pre), sd(exp_pre),
+         sd(cont_mid), sd(exp_mid),
+         sd(cont_post), sd(exp_post)),
+  n = c(length(cont_pre), length(exp_pre),
+        length(cont_mid), length(exp_mid),
+        length(cont_post), length(exp_post))
+)
+
+# Calculate standard error
+sd$SE <- sd$SD / sqrt(sd$n)
+print(sd)
+```
+
+
+Save into 2 tables to compare
+1. Control group
+```{r}
+# Combine the mean values into a matrix
+contMeans_table <- rbind(contMean_pre, contMean_mid, contMean_post)
+
+# Assign row and column names
+rowc <- rownames(contMeans_table) <- c("Pre-Season", "Mid-Season", "Post-Season")
+colc <- colnames(contMeans_table) <- c("Somatic_Score", "Worry_Score", "Concentration")
+
+# Convert to a data frame for better readability
+contMeans_table <- as.data.frame(contMeans_table)
+print(contMeans_table)
+```
+
+2. Experiment Group
+```{r}
+# Combine the mean values into a matrix
+expMeans_table <- rbind(expMean_pre, expMean_mid, expMean_post)
+
+# Assign row and column names
+rowe <- rownames(expMeans_table) <- c("Pre-Season", "Mid-Season", "Post-Season")
+cole <- colnames(expMeans_table) <- c("Somatic_Score", "Worry_Score", "Concentration")
+
+# Convert to a data frame for better readability
+expMeans_table <- as.data.frame(expMeans_table)
+print(expMeans_table)
+```
+
+
+
+Visualization
+
+1. Compare the three scores across three stages in 2 groups. 
+```{r}
+# Control Group
+control_long <- tidyr::gather(Clean_control, key = "Score_Type", value = "Score", Somatic_Score, Worry_Score, Concentration)
+boxplot_control <- ggplot(control_long, aes(x = Stage, y = Score, fill = Score_Type)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Comparison of Scores Across Stages in Control Group", x = "Stage", y = "Score", fill = "Score Type")
+
+# Print the boxplot
+print(boxplot_control)
+
+# Experiment Group
+exp_long <- tidyr::gather(Clean_exp, key = "Score_Type", value = "Score", Somatic_Score, Worry_Score, Concentration)
+boxplot_exp <- ggplot(exp_long, aes(x = Stage, y = Score, fill = Score_Type)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Comparison of Scores Across Stages in Experiment Group", x = "Stage", y = "Score", fill = "Score Type")
+
+# Print the boxplot
+print(boxplot_exp)
+
+```
+
+
+Inferential Stats
+
+1. Preparation
+```{r}
+# Mean of each stage in Control Group
+contMean_total <- aggregate(Total_Score ~ Stage, data_control, mean)
+print(contMean_total)
+
+# Mean of each stage in Experiment Group
+expMean_total <- aggregate(Total_Score ~ Stage, data_exp, mean)
+print(expMean_total)
+
+```
+
+2. Save into a table for ANOVA
+```{r}
+# Save the means of each stage and group
+anova_table <- merge(contMean_total, expMean_total, by = "Stage", suffixes = c("_Control", "_Experiment"))
+anova_table <- anova_table[order(factor(anova_table$Stage, levels = c("Pre", "Mid", "Post"))), ]
+print(anova_table)
+
+# Add group identifier to both datasets
+Clean_control$Group <- "Control"
+Clean_exp$Group <- "Experiment"
+
+# Combine both datasets
+combined_data <- rbind(Clean_control, Clean_exp)
+
+# Calculate Total Score for each observation
+combined_data$Total_Score <- combined_data$Somatic_Score + combined_data$Worry_Score + combined_data$Concentration
+
+# Convert Stage and Group to factors
+combined_data$Stage <- factor(combined_data$Stage, levels = c("Pre", "Mid", "Post"))
+combined_data$Group <- factor(combined_data$Group)
+
+head(combined_data) # check the new combined table
+
+```
+
+
+3. Visualize the total mean table
+```{r}
+total_long <- pivot_longer(anova_table, 
+                        cols = -Stage, 
+                        names_to = "Group", 
+                        values_to = "Score")
+
+# Create the bar plot
+ggplot(total_long, aes(x = Stage, y = Score, fill = Group)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_fill_manual(values = c("Total_Score_Control" = "brown3", 
+                              "Total_Score_Experiment" = "cadetblue3"),
+                    labels = c("Control", "Experiment")) +
+  geom_errorbar(
+    aes(ymin = sd$Mean - sd$SE, ymax = sd$Mean + sd$SE),
+    position = position_dodge(width = 0.9),
+    width = 0.25
+  ) +
+  labs(title = "Total Scores by Stage and Group",
+       x = "Stage",
+       y = "Total Score",
+       fill = "Group") +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+
+4. ANOVA
+```{r}
+# Use the table "total_long" to do ANOVA test
+anova_result <- aov(Total_Score ~ Stage * Group, data = combined_data)
+summary(anova_result)
+
+# There are significant difference between the two groups of intervention (control and experiment).
+```
+
+5. Post-Hoc test (TukeyHSD)
+** The comparison among the scores of three stages is not needed for this study specifically, so the post-hoc test is only done between the 2 groups across 3 stages. 
+```{r}
+# Get means for Group × Stage
+group_stage_means <- emmeans(anova_result, ~ Group | Stage)
+print(group_stage_means)
+
+lsd_results <- pairs(group_stage_means, adjust = "none")  
+print(lsd_results)
+
+# Filter to keep only Control vs Experiment at each stage
+lsd_control_vs_experiment <- lsd_results[
+  grep("Control - Experiment", summary(lsd_results)$contrast),
+]
+print(lsd_control_vs_experiment)
+
+
+# p-value in Pre-Season are significantly different (<.0001)
+# No significance found at the stage of Mid-Season and Post-Season. 
+```
+
+Visualization
+- Here is the code for visualizing the data with significance
+```{r}
+# Perform LSD comparisons (no p-value adjustment)
+lsd_results <- pairs(group_stage_means, adjust = "none")
+lsd_summary <- as.data.frame(lsd_results[grep("Control - Experiment", summary(lsd_results)$contrast), ])
+
+
+# Calculate mean ± SE for plotting
+plot_data <- summary(group_stage_means) |>
+  transform(
+    lower.CL = emmean - SE,
+    upper.CL = emmean + SE
+  )
+
+
+# Plot with significance bars
+ggplot(plot_data, aes(x = Stage, y = emmean, fill = Group)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
+  geom_errorbar(
+    aes(ymin = lower.CL, ymax = upper.CL),
+    position = position_dodge(width = 0.8),
+    width = 0.25
+  ) +
+# Add significance bars manually for each stage
+  geom_signif(
+    y_position = max(plot_data$upper.CL) * 1.05,
+    xmin = c(0.8, 1.8, 2.8),
+    xmax = c(1.2, 2.2, 3.2),
+    annotations = ifelse(lsd_summary$p.value < 0.05, 
+                       ifelse(lsd_summary$p.value < 0.01, "**", "*"), 
+                       "ns"),
+    tip_length = 0.01
+  ) +
+  labs(
+    title = "LSD Post-Hoc Comparisons",
+    subtitle = "Error bars = ±1 SE | *p<0.05, **p<0.01, ns=not significant",
+    x = "Stage",
+    y = "Total Score",
+    fill = "Group"
+  ) +
+  scale_fill_manual(values = c("Control" = "#F8766D", "Experiment" = "#00BFC4")) +
+  theme_minimal()
+
+
+```
+
