@@ -15,6 +15,7 @@ library(ggplot2)
 library(readr)
 library(reshape2)
 library(tidyr)
+library(dplyr)
 library(emmeans)
 if (!require(ggsignif)) install.packages("ggsignif")
 library(ggsignif)  # For significance bars
@@ -199,7 +200,7 @@ print(expMeans_table)
 
 Visualization
 
-1. Compare the three scores across three stages in 2 groups. 
+Compare the three scores across three stages in 2 groups. 
 ```{r}
 # Control Group
 control_long <- tidyr::gather(Clean_control, key = "Score_Type", value = "Score", Somatic_Score, Worry_Score, Concentration)
@@ -317,8 +318,8 @@ lsd_control_vs_experiment <- lsd_results[
 print(lsd_control_vs_experiment)
 
 
-# p-value in Pre-Season are significantly different (<.0001)
-# No significance found at the stage of Mid-Season and Post-Season. 
+# p-value in Pre-Season and Post-Season are significantly different 
+# No significance found at the stage of Mid-Season. 
 ```
 
 Visualization
@@ -367,4 +368,3 @@ ggplot(plot_data, aes(x = Stage, y = emmean, fill = Group)) +
 
 
 ```
-
