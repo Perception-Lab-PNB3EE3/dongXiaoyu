@@ -20,7 +20,6 @@ library(emmeans)
 if (!require(ggsignif)) install.packages("ggsignif")
 library(ggsignif)  # For significance bars
 
-
 sample_size = 35 # For each group, there are 35 individuals to match the needs of power and effect size. 
 ```
 
@@ -200,7 +199,7 @@ print(expMeans_table)
 
 Visualization
 
-Compare the three scores across three stages in 2 groups. 
+1. Compare the three scores across three stages in 2 groups. 
 ```{r}
 # Control Group
 control_long <- tidyr::gather(Clean_control, key = "Score_Type", value = "Score", Somatic_Score, Worry_Score, Concentration)
@@ -223,6 +222,76 @@ boxplot_exp <- ggplot(exp_long, aes(x = Stage, y = Score, fill = Score_Type)) +
 print(boxplot_exp)
 
 ```
+
+2. 
+```{r}
+# Make both tables have Group identifiers (added to your existing code)
+contMeans_table$Group <- "Control"
+expMeans_table$Group <- "Experiment"
+
+contMeans_table$Stage <- rownames(contMeans_table)
+expMeans_table$Stage <- rownames(expMeans_table)
+
+# Combine the tables
+combined_data <- rbind(contMeans_table, expMeans_table)
+
+# Convert to long format
+long_data <- pivot_longer(combined_data,
+                         cols = c(Somatic_Score, Worry_Score, Concentration),
+                         names_to = "Score_Type",
+                         values_to = "Value")
+
+# Create the combined plot
+ggplot(long_data, aes(x = Stage, y = Value, 
+                     color = interaction(Group, Score_Type),
+                     linetype = Score_Type,
+                     group = interaction(Group, Score_Type))) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 3) +
+  scale_color_manual(
+    name = "Group & Score",
+    values = c(
+      "Control.Somatic_Score" = "#E41A1C",  # Red
+      "Control.Worry_Score" = "#E41A1C",     # Same red
+      "Control.Concentration" = "#E41A1C",   # Same red
+      "Experiment.Somatic_Score" = "#377EB8", # Blue
+      "Experiment.Worry_Score" = "#377EB8",   # Same blue
+      "Experiment.Concentration" = "#377EB8"  # Same blue
+    ),
+    labels = c(
+      "Control (All Scores)",
+      "", "",  # Empty labels to avoid duplicates
+      "Experiment (All Scores)",
+      "", ""
+    )
+  ) +
+  scale_linetype_manual(
+    name = "Score Type",
+    values = c(
+      "Somatic_Score" = "solid",
+      "Worry_Score" = "dashed",
+      "Concentration" = "dotted"
+    )
+  ) +
+  labs(
+    title = "Psychological Scores Across Seasons",
+    subtitle = "Control vs. Intervention Groups",
+    x = "Season Stage",
+    y = "Mean Score"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    legend.box = "vertical",
+    legend.spacing.y = unit(0.2, "cm"),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  guides(
+    color = guide_legend(order = 1, nrow = 1),
+    linetype = guide_legend(order = 2)
+  )
+```
+
 
 
 Inferential Stats
@@ -318,8 +387,7 @@ lsd_control_vs_experiment <- lsd_results[
 print(lsd_control_vs_experiment)
 
 
-# p-value in Pre-Season and Post-Season are significantly different 
-# No significance found at the stage of Mid-Season. 
+# p-value in Pre-Season, Mid-Season and, Post-Season are all significantly different 
 ```
 
 Visualization

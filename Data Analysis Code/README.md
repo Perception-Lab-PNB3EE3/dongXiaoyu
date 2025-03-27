@@ -40,8 +40,7 @@ Since there is no actual participant, we use data simulating to get some example
 # Key Findings
 1. Significant Group Differences: The intervention showed significant effects in reducing anxiety scores
 2. Stage-Specific Effects: 
-   - Strong effects in Pre-Season and Post-Season
-   - Non-significant differences in Mid-Season
+   - Significant effects in Pre-Season, Mid-Season, and Post-Season
 3. Visual Patterns: Experimental group consistently showed lower anxiety scores across all stages
 
 
